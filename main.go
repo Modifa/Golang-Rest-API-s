@@ -18,8 +18,7 @@ func setupRouter() *gin.Engine {
 //
 func setupConfigs() {
 	os.Setenv("AuthDBNURL", "postgresql://postgres:password:@localhost:5432/whatsapp")
-	os.Setenv("KAFKAUSERNAME", "user")
-
+	os.Setenv("WEBSERVER_PORT", "8080")
 }
 
 //
@@ -31,13 +30,13 @@ func scopeSetupConfigs(router *gin.Engine) {
 func main() {
 	//call configuerations
 	setupConfigs()
-	PORT := "3000"
+
 	r := setupRouter()
 
 	// dynamicaaly  scope router configuerations
 	scopeSetupConfigs(r)
 	//set up local host
-	r.Run(":" + os.Getenv(PORT) + PORT)
+	os.Setenv("WEBSERVER_PORT", "8080")
 }
 
 // "postgresql://postgres:password:@localhost:5432/whatsapp"
