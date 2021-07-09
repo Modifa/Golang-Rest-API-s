@@ -36,7 +36,7 @@ func main() {
 	// dynamicaaly  scope router configuerations
 	scopeSetupConfigs(r)
 	//set up local host
-	os.Setenv("WEBSERVER_PORT", "8080")
+	r.Run(":" + os.Getenv("WEBSERVER_PORT"))
 }
 
 // "postgresql://postgres:password:@localhost:5432/whatsapp"
