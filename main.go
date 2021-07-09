@@ -17,7 +17,7 @@ func setupRouter() *gin.Engine {
 
 //
 func setupConfigs() {
-	os.Setenv("AuthDBNURL", "postgresql://postgres:password:@localhost:5432/whatsapp")
+	os.Setenv("AuthDBNURL", "postgres://cogjgedlgavael:cf43a86f559ebdd296331ca10991a0bfc87dfcf1fb7c83d3407698719348a669@ec2-18-204-74-74.compute-1.amazonaws.com:5432/d7jnruc4m8g23q")
 	os.Setenv("WEBSERVER_PORT", "8080")
 }
 
