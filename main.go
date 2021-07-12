@@ -35,7 +35,7 @@ func main() {
 
 	// dynamicaaly  scope router configuerations
 	scopeSetupConfigs(r)
-	//set up local host
+	//set up Web host
 	r.Run(":" + os.Getenv("WEBSERVER_PORT"))
 }
 

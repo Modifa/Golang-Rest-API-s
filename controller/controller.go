@@ -69,7 +69,7 @@ func ListContacts(c *gin.Context) {
 	db := s.DB{}
 	var k models.Contacts
 	if err := c.ShouldBindBodyWith(&k, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 
@@ -96,7 +96,7 @@ func ListGroups(c *gin.Context) {
 	db := s.DB{}
 	var k models.Groups
 	if err := c.ShouldBindBodyWith(&k, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	groups, err := db.ReturnGroups("public.fn_getgroupsjson", k)
@@ -122,11 +122,11 @@ func SendMessage(c *gin.Context) {
 	var rb models.Returnblock
 	var m models.Message
 	if err := c.ShouldBindBodyWith(&m, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	message, err := db.SaveOnDB("public.fn_send_message", m)
+	_, err := db.SaveOnDB("public.fn_send_message", m)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -138,7 +138,7 @@ func SendMessage(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	} else {
 		c.JSON(http.StatusOK, rb.New(true, "", m))
-		fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", message)
+		fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", m.Message)
 	}
 }
 
@@ -151,11 +151,11 @@ func DeleteMessage(c *gin.Context) {
 	var rb models.Returnblock
 	var d models.Deletedmessage
 	if err := c.ShouldBindBodyWith(&d, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	dltmessage, err := db.SaveOnDB("public.fn_deletedmessage", d)
+	_, err := db.SaveOnDB("public.fn_deletedmessage", d)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -167,7 +167,7 @@ func DeleteMessage(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	}
 	c.JSON(http.StatusOK, rb.New(true, "", d))
-	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", dltmessage)
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", d.Messageid)
 }
 
 //Create New Group
@@ -179,11 +179,11 @@ func CreateGroup(c *gin.Context) {
 	var rb models.Returnblock
 	var g models.CreateGroup
 	if err := c.ShouldBindBodyWith(&g, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	newgroup, err := db.SaveOnDB("public.fn_addnewgroup", g)
+	_, err := db.SaveOnDB("public.fn_addnewgroup", g)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -195,7 +195,7 @@ func CreateGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	}
 	c.JSON(http.StatusOK, rb.New(true, "", g))
-	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", newgroup)
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", g.Groupname)
 
 }
 
@@ -208,11 +208,11 @@ func Addtogroup(c *gin.Context) {
 	var rb models.Returnblock
 	var a models.AddtoGroups
 	if err := c.ShouldBindBodyWith(&a, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	added, err := db.SaveOnDB("public.fn_addmembers", a)
+	_, err := db.SaveOnDB("public.fn_addmembers", a)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -224,7 +224,7 @@ func Addtogroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	}
 	c.JSON(http.StatusOK, rb.New(true, "", a))
-	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", added)
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", a.Userid)
 
 }
 
@@ -237,11 +237,11 @@ func RemoveFromGroup(c *gin.Context) {
 	var rb models.Returnblock
 	var r models.RemoveFromGroup
 	if err := c.ShouldBindBodyWith(&r, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	dltedFromGroup, err := db.SaveOnDB("public.fn_deletemembers", r)
+	_, err := db.SaveOnDB("public.fn_deletemembers", r)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -253,7 +253,7 @@ func RemoveFromGroup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	}
 	c.JSON(http.StatusOK, rb.New(true, "", r))
-	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", dltedFromGroup)
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", r.Deleted_user)
 
 }
 
@@ -266,11 +266,11 @@ func SendGroupMessage(c *gin.Context) {
 	var rb models.Returnblock
 	var m models.GroupsMessage
 	if err := c.ShouldBindBodyWith(&m, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	groupMessage, err := db.SaveOnDB("public.fn_sendgroupmessage", m)
+	_, err := db.SaveOnDB("public.fn_sendgroupmessage", m)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -282,7 +282,7 @@ func SendGroupMessage(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	}
 	c.JSON(http.StatusOK, rb.New(true, "", m))
-	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", groupMessage)
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", m.Groupmessage)
 
 }
 
@@ -295,11 +295,11 @@ func DeletegroupMessage(c *gin.Context) {
 	var rb models.Returnblock
 	var d models.DeletedGroupmessage
 	if err := c.ShouldBindBodyWith(&d, binding.JSON); err != nil {
-		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
 	//use function
-	deletedgroupMsg, err := db.SaveOnDB("public.fn_deleted_groupmessage", d)
+	_, err := db.SaveOnDB("public.fn_deleted_groupmessage", d)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -311,6 +311,59 @@ func DeletegroupMessage(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
 	}
 	c.JSON(http.StatusOK, rb.New(true, "", d))
-	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", deletedgroupMsg)
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", d.DeleteMessageid)
+
+}
+
+//
+
+func Getmessages(c *gin.Context) {
+	db := s.DB{}
+	var rb models.Returnblock
+	var m models.GetMessage
+	if err := c.ShouldBindBodyWith(&m, binding.JSON); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
+		return
+	}
+
+	messages, err := db.ReturnMessage("fn_getMessagesjson", m)
+	if err != nil {
+		fmt.Println("QueryRow failed: ", err.Error())
+		errormessage := fmt.Sprintf("%v\n", err)
+		c.JSON(http.StatusBadRequest, errormessage)
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	if err != nil {
+		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
+	}
+	c.JSON(http.StatusOK, rb.New(true, "", m))
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", messages)
+
+}
+
+//
+func GetGroupmessages(c *gin.Context) {
+	db := s.DB{}
+	var rb models.Returnblock
+	var gm models.GetGroupMessage
+	if err := c.ShouldBindBodyWith(&gm, binding.JSON); err != nil {
+		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
+		return
+	}
+
+	groupMessages, err := db.ReturnGroupMessage("", gm)
+	if err != nil {
+		fmt.Println("QueryRow failed: ", err.Error())
+		errormessage := fmt.Sprintf("%v\n", err)
+		c.JSON(http.StatusBadRequest, errormessage)
+		c.JSON(http.StatusUnprocessableEntity, err.Error())
+		return
+	}
+	if err != nil {
+		c.JSON(http.StatusBadRequest, rb.New(false, "", err))
+	}
+	c.JSON(http.StatusOK, rb.New(true, "", gm))
+	fmt.Fprintf(os.Stdout, "QueryRow Success: %v\n", groupMessages)
 
 }

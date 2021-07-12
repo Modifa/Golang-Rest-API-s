@@ -104,6 +104,48 @@ func (db *DB) ReturnGroups(functionnamewithschema string, m interface{}) ([]mode
 	return LoggedUser, nil
 }
 
+//
+func (db *DB) ReturnMessage(functionnamewithschema string, m interface{}) ([]models.ReturnMessages, error) {
+	Messages := []models.ReturnMessages{}
+	u := ConVertInterface(functionnamewithschema, m)
+	ctx := context.Background()
+	db1, _ := pgxpool.Connect(ctx, os.Getenv("AuthDBNURL"))
+	defer db1.Close()
+	//
+	err := pgxscan.Select(ctx, db1, &Messages, u)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			fmt.Println(pgErr.Message) // => syntax error at end of input
+			fmt.Println(pgErr)         // => syntax error at end of input
+			fmt.Println(pgErr.Code)    // => 42601
+		}
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+	}
+
+	return Messages, nil
+}
+func (db *DB) ReturnGroupMessage(functionnamewithschema string, m interface{}) ([]models.ReturnGroupMessages, error) {
+	Messages := []models.ReturnGroupMessages{}
+	u := ConVertInterface(functionnamewithschema, m)
+	ctx := context.Background()
+	db1, _ := pgxpool.Connect(ctx, os.Getenv("AuthDBNURL"))
+	defer db1.Close()
+	//
+	err := pgxscan.Select(ctx, db1, &Messages, u)
+	if err != nil {
+		var pgErr *pgconn.PgError
+		if errors.As(err, &pgErr) {
+			fmt.Println(pgErr.Message) // => syntax error at end of input
+			fmt.Println(pgErr)         // => syntax error at end of input
+			fmt.Println(pgErr.Code)    // => 42601
+		}
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+	}
+
+	return Messages, nil
+}
+
 //Convert Interface and return Query string
 func ConVertInterface(funcstr string, m interface{}) string {
 	q := "select * from " + funcstr + "("

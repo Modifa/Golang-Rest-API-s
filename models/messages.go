@@ -24,3 +24,10 @@ type GroupsMessage struct {
 	Sender_id    int64  `json:"senderid"`
 	Groupmessage string `db:"groupmessage"`
 }
+
+type ReturnMessages struct {
+	Messages string `db:"fn_getMessagesjson"`
+}
+type GetMessage struct {
+	UserId int64 `json:"userid_"`
+}
