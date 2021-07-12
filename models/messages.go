@@ -1,13 +1,11 @@
 package models
 
-//
+// Message Group
 type Message struct {
 	Message    string `db:"message"`
 	Senderid   int64  `json:"senderid"`
 	Recieverid int64  `json:"recieverid"`
 }
-
-//
 type Deletedmessage struct {
 	Messageid int64 `json:"messageid"`
 }

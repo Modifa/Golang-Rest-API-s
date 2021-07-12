@@ -26,6 +26,9 @@ func Init(r *gin.Engine) {
 		messages.POST("/DeleteMessage", c.DeleteMessage)
 		messages.POST("/SendGroupMessage", c.SendGroupMessage)
 		messages.POST("/DeletegroupMessage", c.DeletegroupMessage)
+		messages.GET("/GetMessages", c.Getmessages)
+		messages.GET("/GetMessages", c.GetGroupmessages)
+
 	}
 	groups := r.Group("Groups")
 	{

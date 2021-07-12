@@ -24,9 +24,7 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, err.Error())
 		return
 	}
-
 	//use function
-
 	_, err := db.SaveOnDB("public.fn_adduser", u)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
@@ -62,19 +60,16 @@ func LoginUser(c *gin.Context) {
 }
 
 //Get all Contacts
-
 func ListContacts(c *gin.Context) {
 	var rb models.Returnblock
-
 	db := s.DB{}
 	var k models.Contacts
 	if err := c.ShouldBindBodyWith(&k, binding.JSON); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
-
+	//use function
 	contacts, err := db.ReturnContactList("public.fn_getcontactsjson", k)
-
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
 		errormessage := fmt.Sprintf("%v\n", err)
@@ -92,13 +87,13 @@ func ListContacts(c *gin.Context) {
 
 func ListGroups(c *gin.Context) {
 	var rb models.Returnblock
-
 	db := s.DB{}
 	var k models.Groups
 	if err := c.ShouldBindBodyWith(&k, binding.JSON); err != nil {
 		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
+	//use function
 	groups, err := db.ReturnGroups("public.fn_getgroupsjson", k)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
@@ -114,7 +109,6 @@ func ListGroups(c *gin.Context) {
 }
 
 //Send Message
-
 func SendMessage(c *gin.Context) {
 	//database
 	db := s.DB{}
@@ -143,7 +137,6 @@ func SendMessage(c *gin.Context) {
 }
 
 // Delete sent Message
-
 func DeleteMessage(c *gin.Context) {
 	//database
 	db := s.DB{}
@@ -171,7 +164,6 @@ func DeleteMessage(c *gin.Context) {
 }
 
 //Create New Group
-
 func CreateGroup(c *gin.Context) {
 	//database
 	db := s.DB{}
@@ -200,7 +192,6 @@ func CreateGroup(c *gin.Context) {
 }
 
 //Add contacts to group
-
 func Addtogroup(c *gin.Context) {
 	//database
 	db := s.DB{}
@@ -229,7 +220,6 @@ func Addtogroup(c *gin.Context) {
 }
 
 // Remove contact from group
-
 func RemoveFromGroup(c *gin.Context) {
 	//database
 	db := s.DB{}
@@ -258,11 +248,9 @@ func RemoveFromGroup(c *gin.Context) {
 }
 
 // send group Message
-
 func SendGroupMessage(c *gin.Context) {
 	//database
 	db := s.DB{}
-	//
 	var rb models.Returnblock
 	var m models.GroupsMessage
 	if err := c.ShouldBindBodyWith(&m, binding.JSON); err != nil {
@@ -287,11 +275,9 @@ func SendGroupMessage(c *gin.Context) {
 }
 
 // Delete Group Message
-
 func DeletegroupMessage(c *gin.Context) {
 	//database
 	db := s.DB{}
-	//
 	var rb models.Returnblock
 	var d models.DeletedGroupmessage
 	if err := c.ShouldBindBodyWith(&d, binding.JSON); err != nil {
@@ -315,8 +301,7 @@ func DeletegroupMessage(c *gin.Context) {
 
 }
 
-//
-
+//Get  Messages
 func Getmessages(c *gin.Context) {
 	db := s.DB{}
 	var rb models.Returnblock
@@ -325,7 +310,7 @@ func Getmessages(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
-
+	//use function
 	messages, err := db.ReturnMessage("fn_getMessagesjson", m)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
@@ -342,7 +327,7 @@ func Getmessages(c *gin.Context) {
 
 }
 
-//
+// Get Group Messages
 func GetGroupmessages(c *gin.Context) {
 	db := s.DB{}
 	var rb models.Returnblock
@@ -351,7 +336,7 @@ func GetGroupmessages(c *gin.Context) {
 		c.JSON(http.StatusUnprocessableEntity, rb.New(false, "Invalid json provided", err))
 		return
 	}
-
+	//use function
 	groupMessages, err := db.ReturnGroupMessage("", gm)
 	if err != nil {
 		fmt.Println("QueryRow failed: ", err.Error())
